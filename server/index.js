@@ -1,6 +1,6 @@
 import express from 'express'
 import cors from 'cors'
-
+import cookieParser from 'cookie-parser';
 import userRouter from './routes/UserRouter.js' ;
 import busRouter from './routes/BusRouter.js' ;
 import connectDb from './config/ConnectDb.js' ;
@@ -14,6 +14,7 @@ app.use(cors({
 }));
 
 app.use(express.json()) ;
+app.use(cookieParser()); // must be before routes
 
 
 const PORT = 8080 ;

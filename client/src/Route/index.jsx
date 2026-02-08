@@ -7,6 +7,8 @@ import Register from "../Pages/Register";
 import Login from "../Pages/Login";
 import DriverProfile from "../Pages/DriverProfile";
 import BusesMap from "../Pages/Busesmap";
+import BusRegisters1 from "../Pages/BusRegisters1";
+import BusRegisters2 from "../Pages/BusRegisters2";
 
 const router = createBrowserRouter([
     {
@@ -22,9 +24,17 @@ const router = createBrowserRouter([
                 element: <Passanger />,
             },
             {
-                path: "drivers",
+                path: "driver",
                 element: <Driver />,
                 children: [
+                    {
+                        path: "BusRegisters1",
+                        element: <BusRegisters1 />,
+                    },
+                    {
+                        path: "BusRegisters2",
+                        element: <BusRegisters2 />,
+                    },
                     {
                         path: "profile",
                         element: <DriverProfile />,

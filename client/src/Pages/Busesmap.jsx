@@ -29,8 +29,8 @@ export default function Busesmap() {
   }, [bus.numbers]);
 
   return (
-   <div className="flex justify-center items-center h-200px">
-      <MapContainer center={route[0]} zoom={13} style={{ height: "500px", width: "50%" }}>
+   <div className="flex justify-center items-center h-200px border-amber-200">
+      <MapContainer center={route[0]} zoom={13} style={{ height: "500px", width: "50%",border:"yellow" }}>
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
         {route.length > 0 && (
           <>

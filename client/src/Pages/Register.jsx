@@ -2,8 +2,8 @@ import {Link} from 'react-router-dom';
 import { FaRegEye } from "react-icons/fa";
 import { FaRegEyeSlash } from "react-icons/fa6";
 import { useState } from 'react';
-import Axios from '../utils/Axios';
-import SummaryApi from '../Common/SummaryApi';
+// import Axios from '../utils/Axios';
+// import SummaryApi from '../Common/SummaryApi';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import AxiosToastError from '../utils/AxiosToastError';
@@ -60,7 +60,7 @@ setData((preve)=>{
 // }
 const handleSubmit = async (e) => {
   e.preventDefault();
-  console.log("Sending data:", data);
+  console.log("Sending data:");
 
   try {
     const response = await axios.post(

@@ -43,17 +43,17 @@ export async function registerUserController(request,response){
         const newUser = new UserModel(payload)
         const save =  await newUser.save()
 
-        const VerifyEmailUrl = `${process.env.FRONTEND_URL}/verify-email?code=${save?._id}`
+    //     const VerifyEmailUrl = `${process.env.FRONTEND_URL}/verify-email?code=${save?._id}`
 
-        const verifyEmail = await sendEmail({
+    //     const verifyEmail = await sendEmail({
 
-        sendTo : email ,
-        subject : "Verify email from BusConnect",
-        html : verifyEmailTemplate({
-            name : name ,
-            url : VerifyEmailUrl
-        })
-    })
+    //     sendTo : email ,
+    //     subject : "Verify email from BusConnect",
+    //     html : verifyEmailTemplate({
+    //         name : name ,
+    //         url : VerifyEmailUrl
+    //     })
+    // })
 
 
     return response.json({
@@ -125,6 +125,7 @@ export async function loginController(request,response){
         const user = await UserModel.findOne({ email })
 
         if(!user){
+            console.log("user not registered") ;
             return response.status(400).json({
                 message : "User not register",
                 error : true,
@@ -132,17 +133,18 @@ export async function loginController(request,response){
             })
         }
 
-        if(user.status !== "Active"){
-            return response.status(400).json({
-                message : "Contact to Admin",
-                error : true,
-                success : false
-            })
-        }
+        // if(user.status !== "Active"){
+        //     return response.status(400).json({
+        //         message : "Contact to Admin",
+        //         error : true,
+        //         success : false
+        //     })
+        // }
 
         const checkPassword = await bcryptjs.compare(password,user.password)
 
         if(!checkPassword){
+             console.log("user not registered") ;
             return response.status(400).json({
                 message : "Check your password",
                 error : true,
@@ -312,7 +314,7 @@ export async function userDetails(request,response){
     try {
         const userId  = request.userId
 
-        console.log(userId)
+         console.log(userId)
 
         const user = await UserModel.findById(userId).select('-password -refresh_token')
 

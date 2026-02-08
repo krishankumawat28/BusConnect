@@ -1,63 +1,71 @@
 import axios from "axios";
-import SummaryApi, { baseURL } from "../Common/SummaryApi.js";
+import SummaryApi , { baseURL } from "../Common/SummaryApi.js"
 
 const Axios = axios.create({
-  baseURL: baseURL,
-  withCredentials: true
-});
+    baseURL : baseURL,
+    withCredentials : true
+})
 
-// Attach access token in header
-// Axios.interceptors.request.use(
-//   (config) => {
-//     const accessToken = localStorage.getItem('accesstoken');
-//     if (accessToken) {
-//       config.headers.Authorization = `Bearer ${accessToken}`;
-//     }
-//     return config;
-//   },
-//   (error) => Promise.reject(error)
-// );
+//sending access token in the header
+Axios.interceptors.request.use(
+    async(config)=>{
+        const accessToken = localStorage.getItem('accesstoken')
 
-// Correct response interceptor for token refresh
-// Axios.interceptors.response.use(
-//   (response) => response,
-//   async (error) => {
-//     const originalRequest = error.config;
-
-//     if (error.response?.status === 401 && !originalRequest._retry) {
-//       originalRequest._retry = true;
-//       const refreshToken = localStorage.getItem("refreshToken");
-
-//       if (refreshToken) {
-//         const newAccessToken = await refreshAccessToken(refreshToken);
-//         if (newAccessToken) {
-//           localStorage.setItem('accesstoken', newAccessToken);
-//           originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-//           return Axios(originalRequest);
-//         }
-//       }
-//     }
-
-//     return Promise.reject(error);
-//   }
-// );
-
-// Token refresher
-const refreshAccessToken = async (refreshToken) => {
-  try {
-    const response = await axios.post(
-      `${baseURL}/api/user/refresh-token`,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${refreshToken}`
+        if(accessToken){
+            config.headers.Authorization = `Bearer ${accessToken}`
         }
-      }
-    );
-    return response.data.data.accessToken;
-  } catch (err) {
-    console.error("Refresh token failed", err);
-  }
-};
 
-export default Axios;
+        return config
+    },
+    (error)=>{
+        return Promise.reject(error)
+    }
+)
+
+//extend the life span of access token with 
+// the help refresh
+Axios.interceptors.request.use(
+    (response)=>{
+        return response
+    },
+    async(error)=>{
+        let originRequest = error.config 
+
+        if(error.response.status === 401 && !originRequest.retry){
+            originRequest.retry = true
+
+            const refreshToken = localStorage.getItem("refreshToken")
+
+            if(refreshToken){
+                const newAccessToken = await refreshAccessToken(refreshToken)
+
+                if(newAccessToken){
+                    originRequest.headers.Authorization = `Bearer ${newAccessToken}`
+                    return Axios(originRequest)
+                }
+            }
+        }
+        
+        return Promise.reject(error)
+    }
+)
+
+
+const refreshAccessToken = async(refreshToken)=>{
+    try {
+        const response = await Axios({
+            ...SummaryApi.refreshToken,
+            headers : {
+                Authorization : `Bearer ${refreshToken}`
+            }
+        })
+
+        const accessToken = response.data.data.accessToken
+        localStorage.setItem('accesstoken',accessToken)
+        return accessToken
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export default Axios
