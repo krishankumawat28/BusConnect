@@ -7,7 +7,8 @@ const Driver = () => {
   const user = useSelector(state => state.user);
 
   useEffect(() => {
-    if (!user?._id) navigate('/login');
+    console.log(user) ;
+    if (user?._id) navigate('/login');
     else if (user.role === "driver" && !user.BusNo) navigate('/driver/BusRegisters1');
     else if (user.role === "driver" && user.BusNo) navigate('/driver/profile');
   }, [user, navigate]);

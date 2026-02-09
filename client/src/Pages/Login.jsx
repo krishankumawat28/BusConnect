@@ -16,14 +16,14 @@ const Login = () => {
         email: "",
         password: ""
     })
-    const navigate = useNavigate() ;
-     const dispatch = useDispatch()
+    const navigate = useNavigate();
+    const dispatch = useDispatch()
     const handleChange = (e) => {
-        const {name,value} = e.target ;
-        setData((preve)=>{
+        const { name, value } = e.target;
+        setData((preve) => {
             return {
-                ...preve ,
-                [name] : value ,
+                ...preve,
+                [name]: value,
             }
         })
     }
@@ -31,34 +31,34 @@ const Login = () => {
         e.preventDefault();
         try {
             const response = await axios.post(
-      'http://localhost:8080/api/user/login',
-      data  ,
-      {
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        withCredentials: true
-      }
-    );
-             console.log("Response:", response.data);
+                'http://localhost:8080/api/user/login',
+                data,
+                {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    withCredentials: true
+                }
+            );
+            console.log("Response:", response.data);
 
-    if (response.data.error) {
-      toast.error(response.data.message);
+            if (response.data.error) {
+                toast.error(response.data.message);
 
-    } else {
-      toast.success(response.data.message);
-        localStorage.setItem('accesstoken',response.data.data.accesstoken)
-        localStorage.setItem('refreshToken',response.data.data.refreshToken)
-       const userDetails = await fetchUserDetails()
-       console.log(userDetails) ;
-        dispatch(setUserDetails(userDetails.data))
+            } else {
+                toast.success(response.data.message);
+                localStorage.setItem('accesstoken', response.data.data.accesstoken)
+                localStorage.setItem('refreshToken', response.data.data.refreshToken)
+                const userDetails = await fetchUserDetails()
+                console.log(userDetails);
+                dispatch(setUserDetails(userDetails.data))
 
-      setData({email: "", password: "" });
-      navigate("/driver");
-    }
+                setData({ email: "", password: "" });
+                navigate("/driver");
+            }
         } catch (error) {
-            console.error("Axios login error : ",error) ;
-            AxiosToastError(error) ;
+            console.error("Axios login error : ", error);
+            AxiosToastError(error);
         }
     }
 
@@ -74,7 +74,7 @@ const Login = () => {
                             id='email'
                             className='bg-blue-50 p-2 border rounded outline-none focus:border-primary-200'
                             name='email'
-                           // value={data.email}
+                            // value={data.email}
                             onChange={handleChange}
                             placeholder='Enter your email'
                         />
@@ -87,8 +87,8 @@ const Login = () => {
                                 id='password'
                                 name='password'
                                 className='w-full outline-none'
-                                
-                              //  value={data.password}
+
+                                //  value={data.password}
                                 onChange={handleChange}
                                 placeholder='Enter your password'
                             />
@@ -99,10 +99,15 @@ const Login = () => {
                     <button className="bg-green-800 hover:bg-green-700 text-white py-2 rounded font-semibold my-3 tracking-wide">Login</button>
 
                 </form>
+                <div className='flex gap-30'>
+                    <p>
+                        Do not have account? <Link to={"/register"} className='font-semibold text-green-700 hover:text-green-800'>Register</Link>
+                    </p>
+                    <p>
+                        <Link to={"/"} className='font-semibold text-green-700 hover:text-green-800'>Go to Home</Link>
+                    </p>
+                </div>
 
-                <p>
-                    Do not have account? <Link to={"/register"} className='font-semibold text-green-700 hover:text-green-800'>Register</Link>
-                </p>
             </div>
         </section>
     )

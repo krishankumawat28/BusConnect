@@ -25,7 +25,7 @@ const Home = () =>{
             <button className="cursor-pointer" onClick={() => Navigate("/passangers")}>Passenger</button>
         </div>
         <div className="cursor-pointer bg-white shadow-lg rounded-xl p-6 hover:bg-green-100 transition-all duration-300 transform hover:scale-105 text-3xl font-semibold text-green-700">
-            <button className="cursor-pointer" onClick={() => Navigate("/drivers")}>Driver</button>
+            <button className="cursor-pointer" onClick={() => Navigate("/driver")}>Driver</button>
         </div>
     </div>
 </main>
